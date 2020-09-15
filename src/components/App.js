@@ -1,30 +1,53 @@
-import React from 'react'
+import React from "react";
 
-import Filters from './Filters'
-import PetBrowser from './PetBrowser'
+import Filters from "./Filters";
+import PetBrowser from "./PetBrowser";
 
 class App extends React.Component {
   constructor() {
-    super()
+    super();
 
     this.state = {
       pets: [],
       filters: {
-        type: 'all'
-      }
-    }
+        type: "all",
+      },
+    };
   }
 
   onChangeType = (e) => {
-
     this.setState({
-      filters:{
-        type: e.target.value
-      }
-    })
-  }
+      filters: {
+        type: e.target.value,
+      },
+    });
+  };
 
-  
+  onFindPetsClick = () => {
+    if (this.state.filters.type === "all") {
+      // console.log("All");
+      fetch("/api/pets")
+        .then((resp) => resp.json())
+        .then((data) => this.setState({ pets: [...data] }));
+    } else if (this.state.filters.type === "cat") {
+      // console.log("All");
+      fetch("/api/pets?type=cat")
+        .then((resp) => resp.json())
+        .then((data) => this.setState({ pets: [...data] }));
+    } else if (this.state.filters.type === "dog") {
+      // console.log("All");
+      fetch("/api/pets?type=dog")
+        .then((resp) => resp.json())
+        .then((data) => this.setState({ pets: [...data] }));
+      // debugger;
+    } else if (this.state.filters.type === "micropig") {
+      // console.log("All");
+      fetch("/api/pets?type=micropig")
+        .then((resp) => resp.json())
+        .then((data) => this.setState({ pets: [...data] }));
+    }
+  };
+
   render() {
     return (
       <div className="ui container">
@@ -34,7 +57,10 @@ class App extends React.Component {
         <div className="ui container">
           <div className="ui grid">
             <div className="four wide column">
-              <Filters onChangeType={this.onChangeType}/>
+              <Filters
+                onChangeType={this.onChangeType}
+                onFindPetsClick={this.onFindPetsClick}
+              />
             </div>
             <div className="twelve wide column">
               <PetBrowser />
@@ -42,8 +68,8 @@ class App extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default App
+export default App;
